@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export interface Project {
@@ -20,26 +21,31 @@ export interface Project {
   daDuyet: boolean;
 }
 
-export const defaultProjects: Project[] = Array.from({ length: 3 }).map((_, i) => ({
-  ngay: "2025-12-20",
-  code: `PRJ-${i + 1}`,
-  maFast: `FAST-${1000 + i}`,
-  tenDuAn: "Bcons Polaris",
-  loaiDuAn: "Chung cư",
-  nhanVien: "Nguyễn Văn A",
-  dienTich: "65m²",
-  soGiayPhep: "GPXD-2025-01",
-  ngayCap: "2025-12-20",
-  donGia: "32,000,000",
-  soLuong: 1,
-  diaChi: "Dĩ An, Bình Dương",
-  ngayDuyet: "2025-12-20",
-  nguoiDuyet: "Trần Thái",
-  daDuyet: i % 2 === 0,
-}));
+export const defaultProjects: Project[] = Array.from({ length: 3 }).map(
+  (_, i) => ({
+    ngay: "2025-12-20",
+    code: `PRJ-${i + 1}`,
+    maFast: `FAST-${1000 + i}`,
+    tenDuAn: "Bcons Polaris",
+    loaiDuAn: "Chung cư",
+    nhanVien: "Nguyễn Văn A",
+    dienTich: "65m²",
+    soGiayPhep: "GPXD-2025-01",
+    ngayCap: "2025-12-20",
+    donGia: "32,000,000",
+    soLuong: 1,
+    diaChi: "Dĩ An, Bình Dương",
+    ngayDuyet: "2025-12-20",
+    nguoiDuyet: "Trần Thái",
+    daDuyet: i % 2 === 0,
+  })
+);
 
 const ProjectList = ({ projects }: { projects?: Project[] }) => {
   const rows = projects && projects.length ? projects : defaultProjects;
+
+  const [selectedRow, setSelectedRow] = useState<number | null>(0);
+
   return (
     <div className="h-full p-4 bg-[#fffdf0]">
       <div className="h-full bg-white rounded-2xl shadow border border-[#fdb91333] flex flex-col">
@@ -53,7 +59,7 @@ const ProjectList = ({ projects }: { projects?: Project[] }) => {
           </span>
         </div>
 
-        {/* SCROLL CONTAINER */}
+        {/* TABLE */}
         <div className="flex-1 overflow-x-auto overflow-y-auto relative">
           <table className="min-w-[2400px] w-full text-sm border-collapse">
             <thead className="sticky top-0 z-40 bg-white text-[#0054a6] uppercase text-xs font-black">
@@ -64,13 +70,14 @@ const ProjectList = ({ projects }: { projects?: Project[] }) => {
                 <th className="p-3 sticky left-[110px] bg-white z-50 min-w-[120px] border-r text-left">
                   Code
                 </th>
-
                 <th className="p-3 min-w-[140px] text-left">Mã Fast</th>
                 <th className="p-3 min-w-[220px] text-left">Tên dự án</th>
                 <th className="p-3 min-w-[150px] text-left">Loại dự án</th>
                 <th className="p-3 min-w-[180px] text-left">Nhân viên</th>
                 <th className="p-3 min-w-[120px] text-left">Diện tích</th>
-                <th className="p-3 min-w-[160px] text-left">Số giấy phép</th>
+                <th className="p-3 min-w-[160px] text-left">
+                  Số giấy phép
+                </th>
                 <th className="p-3 min-w-[130px] text-left">Ngày cấp</th>
                 <th className="p-3 min-w-[140px] text-left">Đơn giá</th>
                 <th className="p-3 min-w-[120px] text-left">Số lượng</th>
@@ -84,43 +91,71 @@ const ProjectList = ({ projects }: { projects?: Project[] }) => {
             </thead>
 
             <tbody className="text-slate-700">
-              {rows.map((p, i) => (
-                <tr
-                  key={i}
-                  className="border-b hover:bg-[#fdb9130f] transition"
-                >
-                  <td className="p-3 sticky left-0 bg-white z-30 font-bold text-[#0054a6]">
-                    {p.ngay}
-                  </td>
-                  <td className="p-3 sticky left-[110px] bg-white z-30 font-bold">
-                    {p.code}
-                  </td>
+              {rows.map((p, i) => {
+                const active = selectedRow === i;
 
-                  <td className="p-3 font-mono">{p.maFast}</td>
-                  <td className="p-3 font-semibold">{p.tenDuAn}</td>
-                  <td className="p-3">{p.loaiDuAn}</td>
-                  <td className="p-3">{p.nhanVien}</td>
-                  <td className="p-3">{p.dienTich}</td>
-                  <td className="p-3 font-mono">{p.soGiayPhep}</td>
-                  <td className="p-3">{p.ngayCap}</td>
-                  <td className="p-3 font-bold text-[#0054a6]">{p.donGia}</td>
-                  <td className="p-3 text-center">{p.soLuong}</td>
-                  <td className="p-3 truncate max-w-[260px]">{p.diaChi}</td>
-                  <td className="p-3">{p.ngayDuyet}</td>
-                  <td className="p-3 font-semibold"> {p.nguoiDuyet}</td>
-                  <td className="p-3 sticky right-0 bg-white z-30 border-l text-center">
-                    {p.daDuyet ? (
-                      <span className="inline-flex items-center gap-1 text-green-600 font-black">
-                        <CheckCircle2 size={14} /> OK
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-red-400 font-black">
-                        <XCircle size={14} /> NO
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                return (
+                  <tr
+                    key={i}
+                    onClick={() => setSelectedRow(i)}
+                    className={`border-b cursor-pointer transition
+                      ${
+                        active
+                          ? "bg-[#0054a6] text-white"
+                          : "hover:bg-[#fdb9130f]"
+                      }`}
+                  >
+                    
+                    {/* STICKY LEFT */}
+                    <td
+                      className={`p-3 sticky left-0 z-30 font-bold
+                        ${active ? "bg-[#0054a6]" : "bg-white text-[#0054a6]"}`}
+                    >
+                      {p.ngay}
+                    </td>
+
+                    <td
+                      className={`p-3 sticky left-[110px] z-30 font-bold
+                        ${active ? "bg-[#0054a6]" : "bg-white"}`}
+                    >
+                      {p.code}
+                    </td>
+
+                    <td className="p-3 font-mono">{p.maFast}</td>
+                    <td className="p-3 font-semibold">{p.tenDuAn}</td>
+                    <td className="p-3">{p.loaiDuAn}</td>
+                    <td className="p-3">{p.nhanVien}</td>
+                    <td className="p-3">{p.dienTich}</td>
+                    <td className="p-3 font-mono">{p.soGiayPhep}</td>
+                    <td className="p-3">{p.ngayCap}</td>
+                    <td className="p-3 font-bold">{p.donGia}</td>
+                    <td className="p-3 text-center">{p.soLuong}</td>
+                    <td className="p-3 truncate max-w-[260px]">
+                      {p.diaChi}
+                    </td>
+                    <td className="p-3">{p.ngayDuyet}</td>
+                    <td className="p-3 font-semibold">
+                      {p.nguoiDuyet}
+                    </td>
+
+                    {/* STICKY RIGHT */}
+                    <td
+                      className={`p-3 sticky right-0 z-30 border-l text-center
+                        ${active ? "bg-[#0054a6]" : "bg-white"}`}
+                    >
+                      {p.daDuyet ? (
+                        <span className="inline-flex items-center gap-1 font-black text-green-300">
+                          <CheckCircle2 size={14} /> OK
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 font-black text-red-300">
+                          <XCircle size={14} /> NO
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

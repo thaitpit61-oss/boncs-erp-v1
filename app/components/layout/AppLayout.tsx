@@ -12,6 +12,9 @@ import Select from "../ui/Select";
 import { HomeIcon, UserPlus } from "lucide-react";
 import { BCONS_PROJECTS, PROJECT_TYPES } from "../../lib/constants/project";
 import PaymentSchedule from "../project/PaymentSchedule";
+import FormTemplateList from "../project/FormTemplateList";
+import ProductCartList from "../product/ProductCartList";
+import SaleList from "../product/SaleList";
 
 interface ProjectForm {
   ngay: string;
@@ -117,15 +120,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* WORKSPACE - Thêm menu */}
         <div className="flex-1 min-h-0 bg-slate-50">
-          {currentView === "project-1" ? (
-            <ProjectList projects={projects} />
-          ) : currentView === "project-2" ? (
-            <PromoList />
-          ) : currentView === "project-3" ? (
-            <PaymentSchedule />
-          ) : (
-            children
-          )}
+          {currentView === "project-1" && <ProjectList projects={projects} />}
+          {currentView === "project-2" && <PromoList />}
+          {currentView === "project-3" && <PaymentSchedule />}
+          {currentView === "project-4" && <FormTemplateList />}
+
+          {currentView === "product-1" && <ProductCartList />}
+          {currentView === "product-2" && <SaleList />}
+
+          {!currentView.startsWith("project") &&
+            !currentView.startsWith("product") &&
+            children}
         </div>
       </div>
 

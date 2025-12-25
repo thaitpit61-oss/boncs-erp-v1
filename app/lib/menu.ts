@@ -16,12 +16,12 @@ export const menuItems = [
     ],
   },
   {
-    id: "cart",
+    id: "product",
     label: "Giỏ hàng",
     icon: "Users",
     subItems: [
-      { id: "cart-1", label: "Danh sách giỏ hàng" },
-      { id: "cart-2", label: "Đợt mở bán" },
+      { id: "product-1", label: "Danh sách sản phẩm" },
+      { id: "product-2", label: "Đợt mở bán" },
     ],
   },
 ];
